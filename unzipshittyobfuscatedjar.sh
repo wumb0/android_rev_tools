@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ ! -f "$1" ]; then
     echo $i does not exist
     exit
