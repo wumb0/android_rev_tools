@@ -1,6 +1,6 @@
 #!/bin/bash
-JAD_PATH="./jad"
-DEX2JAR_PATH="./d2j-dex2jar.sh"
+JAD_PATH="/Users/Cheddar/Dev/jad/jad"
+DEX2JAR_PATH="/Users/Cheddar/Dev/dex2jar/d2j-dex2jar.sh"
 
 #http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 while [[ $# > 0 ]]; do
@@ -9,6 +9,9 @@ while [[ $# > 0 ]]; do
     case $key in
         -f|--force)
             FORCE="--force"
+        ;;
+        -s|--shitty)
+            SHITTY=1
         ;;
         *)
             if [ -z $APK_NAME ]; then
@@ -39,6 +42,7 @@ if [ ! -f "$JAD_PATH" ]; then
 fi
 
 if [ ! -z $DIE ]; then
+    echo "You can use the --shitty/-s option to unzip a jar with class names that clash. You can tell this is the case if this program asks you to overwrite files... This option was created because I got pissed off at non-case-sensitive filesystems"
     exit
 fi
 
@@ -51,5 +55,24 @@ fi
 rm -rf out &>/dev/null
 mkdir out
 echo "extracting and decompiling..."
-unzip -qd out out.jar
+if [ -z "$SHITTY" ]; then
+    unzip -qBd out out.jar
+else
+    outdir="out"
+    unzip -l out.jar | tail -n +4 | sed '$d' | sed '$d' | awk '{print $4}' | while read i;
+    do
+        dir=`dirname "$outdir/$i"`
+        if [ ! -d "$dir" ]; then
+            mkdir -p "$dir"
+        fi
+        if [ "${i: -1}" == "/" ];then
+            continue
+        fi
+        if [ -f "$outdir/$i" ]; then
+            unzip -p "$1" "$i" > "$outdir/$RANDOM-$i"
+        else
+            unzip -p "$1" "$i" > "$outdir/$i"
+        fi
+    done
+fi
 find out -name "*.class" -execdir "$JAD_PATH" -o {} \; 2>/dev/null
