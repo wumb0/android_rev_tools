@@ -23,7 +23,7 @@ do
         continue
     fi
     if [ -f "$outdir/$i" ]; then
-        unzip -p "$1" "$i" > "$outdir/$RANDOM-$i"
+        unzip -p "$1" "$i" > "$outdir/$i.$RANDOM.class"
     else
         unzip -p "$1" "$i" > "$outdir/$i"
     fi

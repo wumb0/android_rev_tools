@@ -70,7 +70,7 @@ else
             continue
         fi
         if [ -f "$outdir/$i" ]; then
-            unzip -p "out.jar" "$i" > "$outdir/$RANDOM-$i"
+            unzip -p "out.jar" "$i" > "$outdir/$i.$RANDOM.class"
         else
             unzip -p "out.jar" "$i" > "$outdir/$i"
         fi
