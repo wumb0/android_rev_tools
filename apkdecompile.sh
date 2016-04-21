@@ -54,10 +54,11 @@ fi
 
 rm -rf out &>/dev/null
 mkdir out
-echo "extracting and decompiling..."
 if [ -z "$SHITTY" ]; then
+    echo "Extracting"
     unzip -qBd out out.jar
 else
+    echo "Doing long and painful extraction due to duplicate names"
     outdir="out"
     unzip -l out.jar | tail -n +4 | sed '$d' | sed '$d' | awk '{print $4}' | while read i;
     do
@@ -69,10 +70,11 @@ else
             continue
         fi
         if [ -f "$outdir/$i" ]; then
-            unzip -p "$1" "$i" > "$outdir/$RANDOM-$i"
+            unzip -p "out.jar" "$i" > "$outdir/$RANDOM-$i"
         else
-            unzip -p "$1" "$i" > "$outdir/$i"
+            unzip -p "out.jar" "$i" > "$outdir/$i"
         fi
     done
 fi
+echo "Decompiling"
 find out -name "*.class" -execdir "$JAD_PATH" -o {} \; 2>/dev/null
