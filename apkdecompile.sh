@@ -78,4 +78,8 @@ else
     done
 fi
 echo "Decompiling"
-find out -name "*.class" -execdir "$JAD_PATH" -o {} \; 2>/dev/null
+
+for i in `find out -name "*.class"`; do
+    outfile=`echo $i | sed "s/\.class$/.jad/"`
+    "$JAD_PATH" -p "$i" 1>"$outfile" 2>/dev/null
+done
