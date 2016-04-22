@@ -23,7 +23,8 @@ do
         continue
     fi
     if [ -f "$outdir/$i" ]; then
-        unzip -p "$1" "$i" > "$outdir/$i.$RANDOM.class"
+        newname=`echo $i | sed "s/\.class$/-$RANDOM.class/"`
+        unzip -p "$1" "$i" > "$outdir/$newname"
     else
         unzip -p "$1" "$i" > "$outdir/$i"
     fi

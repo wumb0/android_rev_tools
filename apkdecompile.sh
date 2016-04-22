@@ -70,7 +70,8 @@ else
             continue
         fi
         if [ -f "$outdir/$i" ]; then
-            unzip -p "out.jar" "$i" > "$outdir/$i.$RANDOM.class"
+            newname=`echo $i | sed "s/\.class$/-$RANDOM.class/"`
+            unzip -p "out.jar" "$i" > "$outdir/$newname"
         else
             unzip -p "out.jar" "$i" > "$outdir/$i"
         fi
