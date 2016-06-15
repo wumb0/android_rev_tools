@@ -56,7 +56,7 @@ rm -rf out &>/dev/null
 mkdir out
 if [ -z "$SHITTY" ]; then
     echo "Extracting"
-    unzip -qBd out out.jar
+    unzip -qd out out.jar
 else
     echo "Doing long and painful extraction due to duplicate names"
     outdir="out"
